@@ -3,3 +3,4 @@ export const PING_INTERVAL = 1000;
 
 export const METRICS_TIMEOUT = 10_000;
 export const METRICS_URL = 'http://localhost:5050';
+export const METRICS_RETRY_DELAY = 1000;

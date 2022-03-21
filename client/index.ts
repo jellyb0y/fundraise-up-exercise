@@ -2,6 +2,7 @@ import Metrics from '@client-modules/metrics';
 import Observer from '@client-modules/observer';
 
 import {
+  METRICS_RETRY_DELAY,
   METRICS_TIMEOUT,
   METRICS_URL,
   PING_INTERVAL,
@@ -13,6 +14,7 @@ import type { PingData } from '@client-modules/observer';
 const metrics = new Metrics<PingData>({
   timeout: METRICS_TIMEOUT,
   metricsUrl: METRICS_URL,
+  retryDelay: METRICS_RETRY_DELAY,
 });
 
 const observer = new Observer({
@@ -28,7 +30,6 @@ const handleProccessInterupt = () => {
     totalRequests,
     successfulRequests,
     internalErrors,
-    failedRequests,
     timeoutedRequests,
   } = metrics.statistic;
 
@@ -37,7 +38,6 @@ const handleProccessInterupt = () => {
       `Total requests: ${totalRequests}\n` +
       `Successful request: ${successfulRequests}\n` +
       `Internal errors: ${internalErrors}\n` +
-      `Failed requests: ${failedRequests}\n` +
       `Timeouted requests: ${timeoutedRequests}`
   );
 

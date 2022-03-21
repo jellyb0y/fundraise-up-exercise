@@ -6,28 +6,28 @@ import type { InitParams, Statistic } from './types';
 class Metrics<M extends {}> {
   private metricsUrl: string;
   private timeout: number;
+  private retryDelay: number;
   private requestsCount: number;
   private successfulRequests: number;
   private internalServerErrors: number;
   private timeoutedRequests: number;
   private pendingRequests: number;
-  private failedRequests: number;
 
   constructor(params: InitParams) {
-    const { metricsUrl, timeout } = params;
+    const { metricsUrl, timeout, retryDelay } = params;
 
     this.metricsUrl = metricsUrl;
     this.timeout = timeout;
+    this.retryDelay = retryDelay;
 
     this.requestsCount = 0;
     this.successfulRequests = 0;
     this.internalServerErrors = 0;
     this.timeoutedRequests = 0;
     this.pendingRequests = 0;
-    this.failedRequests = 0;
   }
 
-  public sendMetrics(data: M): void {
+  public sendMetrics(data: M, attempt = 0): void {
     const controller = new AbortController();
     let timer: NodeJS.Timer;
     this.requestsCount += 1;
@@ -42,7 +42,8 @@ class Metrics<M extends {}> {
           this.internalServerErrors += 1;
         }
 
-        this.failedRequests += 1;
+        const retryDelay = Math.pow(2, attempt) * this.retryDelay;
+        setTimeout(() => this.sendMetrics(data, attempt + 1), retryDelay);
       })
       .finally(() => {
         clearTimeout(timer);
@@ -60,7 +61,6 @@ class Metrics<M extends {}> {
       totalRequests: this.requestsCount - this.pendingRequests,
       successfulRequests: this.successfulRequests,
       internalErrors: this.internalServerErrors,
-      failedRequests: this.failedRequests,
       timeoutedRequests: this.timeoutedRequests,
     };
   }
