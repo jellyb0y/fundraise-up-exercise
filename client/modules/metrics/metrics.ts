@@ -12,13 +12,30 @@ class Metrics<M extends {}> {
   private internalServerErrors: number;
   private timeoutedRequests: number;
   private pendingRequests: number;
+  private onAttempt: (data: M) => void;
+  private onSuccess: (data: M) => void;
+  private onFail: (data: M) => void;
+  private onTimeout: (data: M) => void;
 
-  constructor(params: InitParams) {
-    const { metricsUrl, timeout, retryDelay } = params;
+  constructor(params: InitParams<M>) {
+    const {
+      metricsUrl,
+      timeout,
+      retryDelay,
+      onAttempt,
+      onSuccess,
+      onFail,
+      onTimeout,
+    } = params;
 
     this.metricsUrl = metricsUrl;
     this.timeout = timeout;
     this.retryDelay = retryDelay;
+
+    this.onAttempt = onAttempt;
+    this.onSuccess = onSuccess;
+    this.onFail = onFail;
+    this.onTimeout = onTimeout;
 
     this.requestsCount = 0;
     this.successfulRequests = 0;
@@ -33,13 +50,25 @@ class Metrics<M extends {}> {
     this.requestsCount += 1;
     this.pendingRequests += 1;
 
+    if (this.onAttempt) {
+      this.onAttempt(data);
+    }
+
     post(this.metricsUrl, { signal: controller.signal }, data)
       .then(() => {
         this.successfulRequests += 1;
+
+        if (this.onSuccess) {
+          this.onSuccess(data);
+        }
       })
       .catch((response: ServerResponse) => {
         if (response.statusCode >= 500) {
           this.internalServerErrors += 1;
+        }
+
+        if (this.onFail) {
+          this.onFail(data);
         }
 
         const retryDelay = Math.pow(2, attempt) * this.retryDelay;
@@ -53,6 +82,10 @@ class Metrics<M extends {}> {
     timer = setTimeout(() => {
       controller.abort();
       this.timeoutedRequests += 1;
+
+      if (this.onTimeout) {
+        this.onTimeout(data);
+      }
     }, this.timeout);
   }
 

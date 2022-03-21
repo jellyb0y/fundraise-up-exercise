@@ -11,10 +11,26 @@ import {
 
 import type { PingData } from '@client-modules/observer';
 
+const onAttempt = ({ pingId }: PingData) =>
+  console.log(`Attempt to send pingId: ${pingId}`);
+
+const onSuccess = ({ pingId }: PingData) =>
+  console.log(`Succeeded to send pingId: ${pingId}`);
+
+const onFail = ({ pingId }: PingData) =>
+  console.log(`Failed to send pingId: ${pingId}`);
+
+const onTimeout = ({ pingId }: PingData) =>
+  console.log(`Timout error while sending pingId: ${pingId}`);
+
 const metrics = new Metrics<PingData>({
   timeout: METRICS_TIMEOUT,
   metricsUrl: METRICS_URL,
   retryDelay: METRICS_RETRY_DELAY,
+  onAttempt,
+  onSuccess,
+  onFail,
+  onTimeout,
 });
 
 const observer = new Observer({
