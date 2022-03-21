@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "downlevelIteration": true,
+    "paths": {
+      "@server-constants": ["./server/constants.ts"],
+      "@server-types": ["./server/types.ts"],
+      "@server-modules/*": ["./server/modules/*"],
+      "@server-utils/*": ["./server/utils/*"],
+      "@client-constants": ["./client/constants.ts"],
+      "@client-types": ["./client/types.ts"],
+      "@client-modules/*": ["./client/modules/*"],
+      "@client-utils/*": ["./client/utils/*"]
+    }
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}
