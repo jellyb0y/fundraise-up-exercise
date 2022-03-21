@@ -11,6 +11,7 @@ class Metrics<M extends {}> {
   private internalServerErrors: number;
   private timeoutedRequests: number;
   private pendingRequests: number;
+  private failedRequests: number;
 
   constructor(params: InitParams) {
     const { metricsUrl, timeout } = params;
@@ -23,6 +24,7 @@ class Metrics<M extends {}> {
     this.internalServerErrors = 0;
     this.timeoutedRequests = 0;
     this.pendingRequests = 0;
+    this.failedRequests = 0;
   }
 
   public sendMetrics(data: M): void {
@@ -39,6 +41,8 @@ class Metrics<M extends {}> {
         if (response.statusCode >= 500) {
           this.internalServerErrors += 1;
         }
+
+        this.failedRequests += 1;
       })
       .finally(() => {
         clearTimeout(timer);
@@ -55,7 +59,8 @@ class Metrics<M extends {}> {
     return {
       totalRequests: this.requestsCount - this.pendingRequests,
       successfulRequests: this.successfulRequests,
-      failedRequests: this.internalServerErrors,
+      internalErrors: this.internalServerErrors,
+      failedRequests: this.failedRequests,
       timeoutedRequests: this.timeoutedRequests,
     };
   }

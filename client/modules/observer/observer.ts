@@ -34,7 +34,6 @@ class Observer {
     get(this.url)
       .then(() => {
         const pingTS = Date.now();
-
         this.callback({
           pingId: this.pingId++,
           deliveryAttempt: this.deliveryAttempt,

@@ -27,16 +27,21 @@ const handleProccessInterupt = () => {
   const {
     totalRequests,
     successfulRequests,
+    internalErrors,
     failedRequests,
     timeoutedRequests,
   } = metrics.getStatistic();
 
   console.log(
-    `Total requests: ${totalRequests}\n` +
+    '\n' +
+      `Total requests: ${totalRequests}\n` +
       `Successful request: ${successfulRequests}\n` +
+      `Internal errors: ${internalErrors}\n` +
       `Failed requests: ${failedRequests}\n` +
       `Timeouted requests: ${timeoutedRequests}`
   );
+
+  process.exit();
 };
 
 process.on('SIGINT', handleProccessInterupt);
