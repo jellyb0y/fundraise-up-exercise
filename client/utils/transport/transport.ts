@@ -99,7 +99,7 @@ export const get = (
       ...params,
       method: 'GET',
     },
-    undefined,
+    null,
     dontFollow
   );
 
