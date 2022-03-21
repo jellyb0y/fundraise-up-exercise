@@ -14,11 +14,10 @@
     "downlevelIteration": true,
     "paths": {
       "@server-constants": ["./server/constants.ts"],
-      "@server-types": ["./server/types.ts"],
+      "@server-types": ["./server/types"],
       "@server-modules/*": ["./server/modules/*"],
       "@server-utils/*": ["./server/utils/*"],
       "@client-constants": ["./client/constants.ts"],
-      "@client-types": ["./client/types.ts"],
       "@client-modules/*": ["./client/modules/*"],
       "@client-utils/*": ["./client/utils/*"]
     }

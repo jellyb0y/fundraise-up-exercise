@@ -55,7 +55,7 @@ class Metrics<M extends {}> {
     }, this.timeout);
   }
 
-  public getStatistic(): Statistic {
+  public get statistic(): Statistic {
     return {
       totalRequests: this.requestsCount - this.pendingRequests,
       successfulRequests: this.successfulRequests,

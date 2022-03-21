@@ -30,7 +30,7 @@ const handleProccessInterupt = () => {
     internalErrors,
     failedRequests,
     timeoutedRequests,
-  } = metrics.getStatistic();
+  } = metrics.statistic;
 
   console.log(
     '\n' +
