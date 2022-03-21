@@ -1,5 +1,5 @@
 {
-  "name": "fundrise-up-exersize",
+  "name": "fundraise-up-exersize",
   "version": "1.0.0",
   "description": "Test exersize for Funrise Up",
   "scripts": {
@@ -8,7 +8,7 @@
     "lint": "lint-staged"
   },
   "author": "jellyb0y<https://github.com/jellyb0y>",
-  "homepage": "https://github.com/jellyb0y/fundrise-up-exercise#readme",
+  "homepage": "https://github.com/jellyb0y/fundraise-up-exercise#readme",
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint"
